@@ -95,6 +95,7 @@ body {
     flex-shrink: 0;
     align-items: center;
     gap: 2px;
+    overflow-x: auto;
 }
 
 .menu-item {
@@ -105,6 +106,7 @@ body {
     color: #333;
     transition: all 0.2s;
     position: relative;
+    white-space: nowrap;
 }
 
 .menu-item:hover {
@@ -124,12 +126,14 @@ body {
     flex-shrink: 0;
     min-height: 80px;
     overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .ribbon-tab {
     display: none;
     gap: 8px;
     flex-wrap: nowrap;
+    min-width: max-content;
 }
 
 .ribbon-tab.active {
@@ -144,6 +148,7 @@ body {
     border-right: 1px solid #d0d0d0;
     position: relative;
     flex-wrap: nowrap;
+    flex-shrink: 0;
 }
 
 .ribbon-group:last-child {
@@ -176,6 +181,7 @@ body {
     min-width: 50px;
     height: 56px;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .ribbon-btn i {
@@ -205,6 +211,7 @@ body {
     cursor: pointer;
     font-size: 12px;
     height: 28px;
+    flex-shrink: 0;
 }
 
 #fontFamily {
@@ -987,7 +994,11 @@ body {
     background: #a8a8a8;
 }
 
-/* ===== RESPONSIVIDADE ===== */
+/* ============================================
+   RESPONSIVIDADE MELHORADA PARA DISPOSITIVOS MÓVEIS
+   ============================================ */
+
+/* Tablets e telas médias */
 @media (max-width: 1200px) {
     .ribbon-group-title {
         display: none;
@@ -1030,10 +1041,20 @@ body {
     
     .ribbon-tab {
         flex-wrap: wrap;
+        gap: 4px;
     }
     
     .ribbon-group {
         padding: 0 4px;
+        border-right: none;
+        border-bottom: 1px solid #e8e8e8;
+        flex-wrap: wrap;
+        padding-bottom: 4px;
+        margin-bottom: 2px;
+    }
+    
+    .ribbon-group:last-child {
+        border-bottom: none;
     }
     
     #fontFamily {
@@ -1058,127 +1079,12 @@ body {
     }
 }
 
+/* Celulares e telas pequenas */
 @media (max-width: 768px) {
-    #main-menu {
-        padding: 0 8px;
-        overflow-x: auto;
-        gap: 0;
-    }
-    
-    .menu-item {
-        padding: 2px 8px;
-        font-size: 10px;
-        white-space: nowrap;
-    }
-    
-    #ribbon {
-        padding: 2px 4px;
-        min-height: 60px;
-    }
-    
-    .ribbon-btn {
-        height: 40px;
-        min-width: 32px;
-        padding: 2px 4px;
-    }
-    
-    .ribbon-btn i {
-        font-size: 14px;
-    }
-    
-    .ribbon-btn span {
-        font-size: 8px;
-    }
-    
-    .ribbon-select {
-        font-size: 10px;
-        height: 24px;
-        padding: 0 4px;
-    }
-    
-    #fontFamily {
-        width: 60px;
-    }
-    
-    #fontSize {
-        width: 40px;
-    }
-    
-    #numberFormat {
-        width: 60px;
-    }
-    
-    #formula-bar {
-        padding: 2px 8px;
-        height: 28px;
-        gap: 4px;
-    }
-    
-    #cell-reference {
-        min-width: 50px;
-        font-size: 11px;
-        height: 20px;
-        padding: 0 8px;
-    }
-    
-    #formulaField {
-        font-size: 11px;
-        height: 20px;
-        padding: 0 8px;
-    }
-    
-    #status-bar {
-        padding: 2px 8px;
-        height: 24px;
-        font-size: 10px;
-    }
-    
-    #status-left,
-    #status-center,
-    #status-right {
-        gap: 8px;
-    }
-    
-    .sheet-tab {
-        padding: 0 10px;
-        font-size: 10px;
-    }
-    
-    #spreadsheet th,
-    #spreadsheet td {
-        min-width: 50px;
-        font-size: 11px;
-        height: 22px;
-        padding: 0 4px;
-    }
-    
-    #spreadsheet th:first-child,
-    #spreadsheet td:first-child {
-        min-width: 28px;
-        max-width: 28px;
-        font-size: 10px;
-    }
-    
-    .modal-content {
-        margin: 10% auto;
-        width: 95%;
-    }
-    
-    #side-panel {
-        width: 280px;
-    }
-}
-
-@media (max-width: 480px) {
+    /* Barra de título */
     #title-bar {
-        padding: 0 4px;
+        padding: 2px 6px;
         height: 28px;
-    }
-    
-    .window-btn {
-        width: 24px;
-        height: 20px;
-        font-size: 10px;
     }
     
     #app-title {
@@ -1203,9 +1109,296 @@ body {
         font-size: 14px;
     }
     
+    .window-btn {
+        width: 24px;
+        height: 20px;
+        font-size: 10px;
+    }
+    
+    /* Menu principal - rolagem horizontal */
     #main-menu {
+        padding: 0 4px;
+        height: 28px;
+        overflow-x: auto;
+        gap: 0;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .menu-item {
+        padding: 2px 10px;
+        font-size: 10px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    /* Ribbon - reorganização em grade */
+    #ribbon {
+        padding: 4px 4px;
+        min-height: auto;
+        max-height: 140px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    .ribbon-tab {
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 2px 0;
+        min-width: 100%;
+    }
+    
+    .ribbon-group {
+        flex-wrap: wrap;
+        gap: 2px;
+        padding: 4px 6px;
+        border-right: none;
+        border-bottom: 1px solid #e8e8e8;
+        width: 100%;
+        justify-content: flex-start;
+        flex-shrink: 0;
+    }
+    
+    .ribbon-group:last-child {
+        border-bottom: none;
+    }
+    
+    .ribbon-group-title {
+        display: none;
+    }
+    
+    .ribbon-btn {
+        height: 38px;
+        min-width: 32px;
+        padding: 2px 4px;
+        flex: 0 0 auto;
+    }
+    
+    .ribbon-btn i {
+        font-size: 13px;
+    }
+    
+    .ribbon-btn span {
+        font-size: 7px;
+        display: block;
+    }
+    
+    .ribbon-select {
+        font-size: 10px;
         height: 26px;
         padding: 0 4px;
+    }
+    
+    #fontFamily {
+        width: 60px;
+    }
+    
+    #fontSize {
+        width: 40px;
+    }
+    
+    #numberFormat {
+        width: 60px;
+    }
+    
+    /* Barra de fórmula */
+    #formula-bar {
+        padding: 2px 6px;
+        height: 28px;
+        gap: 4px;
+    }
+    
+    #cell-reference {
+        min-width: 44px;
+        font-size: 10px;
+        height: 20px;
+        padding: 0 6px;
+    }
+    
+    #formula-functions {
+        font-size: 14px;
+        padding: 0 4px;
+    }
+    
+    #formulaField {
+        font-size: 11px;
+        height: 20px;
+        padding: 0 8px;
+    }
+    
+    /* Planilha */
+    #sheet-container {
+        padding: 2px;
+    }
+    
+    #spreadsheet th,
+    #spreadsheet td {
+        min-width: 50px;
+        font-size: 11px;
+        height: 24px;
+        padding: 0 4px;
+    }
+    
+    #spreadsheet th:first-child,
+    #spreadsheet td:first-child {
+        min-width: 28px;
+        max-width: 28px;
+        font-size: 10px;
+    }
+    
+    /* Barra de status */
+    #status-bar {
+        padding: 2px 6px;
+        height: 26px;
+        font-size: 9px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    
+    #status-left,
+    #status-center,
+    #status-right {
+        gap: 6px;
+        flex-shrink: 0;
+    }
+    
+    #status-center {
+        display: none;
+    }
+    
+    #status-mode {
+        padding: 0 4px;
+        font-size: 8px;
+    }
+    
+    .sheet-tab {
+        padding: 0 10px;
+        font-size: 10px;
+    }
+    
+    .sheet-add-btn {
+        height: 18px;
+        font-size: 10px;
+        padding: 0 6px;
+    }
+    
+    #status-zoom {
+        gap: 2px;
+    }
+    
+    #status-zoom i {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+    
+    #zoomLevel {
+        min-width: 30px;
+        font-size: 9px;
+    }
+    
+    /* Modais */
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+        max-width: 100%;
+    }
+    
+    .modal-header h2 {
+        font-size: 15px;
+    }
+    
+    .modal-body {
+        padding: 14px;
+        max-height: 300px;
+    }
+    
+    .modal-footer button {
+        padding: 6px 16px;
+        font-size: 12px;
+    }
+    
+    .function-item {
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+    
+    /* Painel lateral */
+    #side-panel {
+        width: 280px;
+    }
+    
+    #panel-header {
+        padding: 10px 14px;
+    }
+    
+    #panel-header span {
+        font-size: 14px;
+    }
+    
+    #panel-content {
+        padding: 12px;
+    }
+    
+    .panel-section {
+        margin-bottom: 14px;
+    }
+    
+    /* Template list */
+    .template-list {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .template-item {
+        padding: 12px 8px;
+    }
+    
+    .template-item i {
+        font-size: 18px;
+    }
+    
+    /* Context menu */
+    .context-menu {
+        min-width: 160px;
+    }
+    
+    .context-item {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Celulares muito pequenos */
+@media (max-width: 400px) {
+    #title-bar {
+        padding: 0 4px;
+        height: 26px;
+    }
+    
+    .window-btn {
+        width: 20px;
+        height: 18px;
+        font-size: 8px;
+    }
+    
+    #app-title {
+        font-size: 9px;
+    }
+    
+    #app-title img {
+        height: 14px;
+    }
+    
+    #file-status {
+        font-size: 8px;
+    }
+    
+    #account-info {
+        font-size: 8px;
+        padding: 0 2px;
+    }
+    
+    #main-menu {
+        height: 24px;
     }
     
     .menu-item {
@@ -1214,36 +1407,32 @@ body {
     }
     
     #ribbon {
-        min-height: 50px;
+        max-height: 120px;
         padding: 2px;
     }
     
-    .ribbon-group {
-        padding: 0 2px;
-    }
-    
     .ribbon-btn {
-        height: 34px;
+        height: 32px;
         min-width: 28px;
-        padding: 1px 2px;
+        padding: 1px 3px;
     }
     
     .ribbon-btn i {
-        font-size: 12px;
+        font-size: 11px;
     }
     
     .ribbon-btn span {
-        display: none;
+        font-size: 6px;
     }
     
     .ribbon-select {
-        font-size: 9px;
-        height: 20px;
+        font-size: 8px;
+        height: 22px;
         padding: 0 2px;
     }
     
     #fontFamily {
-        width: 40px;
+        width: 50px;
     }
     
     #fontSize {
@@ -1251,7 +1440,7 @@ body {
     }
     
     #numberFormat {
-        width: 40px;
+        width: 50px;
     }
     
     #formula-bar {
@@ -1262,14 +1451,14 @@ body {
     
     #cell-reference {
         min-width: 36px;
-        font-size: 9px;
+        font-size: 8px;
         height: 18px;
         padding: 0 4px;
     }
     
     #formula-functions {
         font-size: 12px;
-        padding: 0 4px;
+        padding: 0 2px;
     }
     
     #formulaField {
@@ -1278,84 +1467,73 @@ body {
         padding: 0 6px;
     }
     
-    #sheet-container {
-        padding: 2px;
-    }
-    
     #spreadsheet th,
     #spreadsheet td {
         min-width: 40px;
-        font-size: 10px;
+        font-size: 9px;
         height: 20px;
         padding: 0 2px;
     }
     
     #spreadsheet th:first-child,
     #spreadsheet td:first-child {
-        min-width: 24px;
-        max-width: 24px;
-        font-size: 9px;
+        min-width: 22px;
+        max-width: 22px;
+        font-size: 8px;
     }
     
     #status-bar {
-        height: 20px;
-        padding: 0 4px;
-        font-size: 9px;
-    }
-    
-    #status-left,
-    #status-center,
-    #status-right {
-        gap: 4px;
-    }
-    
-    #status-mode {
+        height: 22px;
         padding: 0 4px;
         font-size: 8px;
     }
     
+    #status-left {
+        gap: 4px;
+    }
+    
     .sheet-tab {
         padding: 0 6px;
-        font-size: 9px;
+        font-size: 8px;
     }
     
     .sheet-add-btn {
         height: 16px;
-        font-size: 10px;
+        font-size: 8px;
         padding: 0 4px;
     }
     
-    #status-zoom {
-        gap: 2px;
-    }
-    
     #status-zoom i {
-        font-size: 10px;
-        padding: 1px 2px;
+        font-size: 8px;
     }
     
     #zoomLevel {
-        min-width: 30px;
-        font-size: 9px;
+        min-width: 24px;
+        font-size: 8px;
+    }
+    
+    .modal-content {
+        margin: 5% auto;
+        width: 98%;
     }
     
     .modal-header h2 {
-        font-size: 14px;
+        font-size: 13px;
     }
     
     .modal-body {
-        padding: 12px;
-        max-height: 300px;
+        padding: 10px;
+        max-height: 250px;
     }
     
     .modal-footer button {
         padding: 4px 12px;
-        font-size: 11px;
+        font-size: 10px;
     }
     
     .function-item {
-        font-size: 12px;
-        padding: 6px 8px;
+        font-size: 10px;
+        padding: 4px 6px;
     }
     
     #side-panel {
@@ -1363,14 +1541,10 @@ body {
     }
     
     #panel-header {
-        padding: 10px;
+        padding: 8px 12px;
     }
     
     #panel-content {
-        padding: 10px;
-    }
-    
-    .panel-section {
-        margin-bottom: 12px;
+        padding: 8px;
     }
 }
