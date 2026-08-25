@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Microsoft Excel - Simulador Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <style id="printOrientationStyle">@page { size: portrait; margin: 10mm; }</style>
+</head>
+<body>
+    <div id="app">
+        <!-- Barra de Título Excel -->
+        <div id="title-bar">
+            <div id="window-controls">
+                <span class="window-btn" id="btnMinimize"><i class="fas fa-minus"></i></span>
+                <span class="window-btn" id="btnMaximize"><i class="fas fa-square"></i></span>
+                <span class="window-btn" id="btnClose"><i class="fas fa-times"></i></span>
+            </div>
+            <div id="app-title">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M23 1H1v22h22V1zM3 21V3h18v18H3z' fill='%23107C41'/%3E%3Cpath d='M8 7h2v10H8V7zm6 0h2v10h-2V7z' fill='%23107C41'/%3E%3C/svg%3E" alt="Excel" style="height:20px;">
+                <span id="workbook-name">Pasta1 - Excel Simulator Pro</span>
+                <span id="file-status">- Salvo</span>
+            </div>
+            <div id="account-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Conta</span>
+            </div>
+        </div>
+
+        <!-- Menu Principal -->
+        <div id="main-menu">
+            <div class="menu-item active" data-menu="file">Arquivo</div>
+            <div class="menu-item" data-menu="home">Página Inicial</div>
+            <div class="menu-item" data-menu="insert">Inserir</div>
+            <div class="menu-item" data-menu="page">Layout da Página</div>
+            <div class="menu-item" data-menu="formulas">Fórmulas</div>
+            <div class="menu-item" data-menu="data">Dados</div>
+            <div class="menu-item" data-menu="review">Revisão</div>
+            <div class="menu-item" data-menu="view">Exibição</div>
+        </div>
+
+        <!-- Barra de Ferramentas -->
+        <div id="ribbon">
+            <!-- Arquivo -->
+            <div class="ribbon-tab" id="tab-file" style="display:none;">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Gerenciar</div>
+                    <button class="ribbon-btn" id="btnNew"><i class="fas fa-file"></i><span>Novo</span></button>
+                    <button class="ribbon-btn" id="btnOpen"><i class="fas fa-folder-open"></i><span>Abrir</span></button>
+                    <button class="ribbon-btn" id="btnSave"><i class="fas fa-save"></i><span>Salvar (.xlsx)</span></button>
+                    <button class="ribbon-btn" id="btnSaveAs"><i class="fas fa-file-download"></i><span>Salvar como</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Importar/Exportar</div>
+                    <button class="ribbon-btn" id="btnExportCSV"><i class="fas fa-file-export"></i><span>Exportar CSV</span></button>
+                    <button class="ribbon-btn" id="btnImportCSV"><i class="fas fa-file-import"></i><span>Importar CSV/XLSX</span></button>
+                    <button class="ribbon-btn" id="btnExportPDF"><i class="fas fa-file-pdf"></i><span>Exportar/Imprimir PDF</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Modelos</div>
+                    <button class="ribbon-btn" id="btnTemplates"><i class="fas fa-layer-group"></i><span>Modelos</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Configurações</div>
+                    <button class="ribbon-btn" id="btnOptions"><i class="fas fa-cog"></i><span>Opções</span></button>
+                    <button class="ribbon-btn" id="btnHelp"><i class="fas fa-question-circle"></i><span>Ajuda</span></button>
+                </div>
+            </div>
+
+            <!-- Página Inicial -->
+            <div class="ribbon-tab active" id="tab-home">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Desfazer</div>
+                    <button class="ribbon-btn" id="btnUndo"><i class="fas fa-undo"></i><span>Desfazer</span></button>
+                    <button class="ribbon-btn" id="btnRedo"><i class="fas fa-redo"></i><span>Refazer</span></button>
+                </div>
+
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Área de Transferência</div>
+                    <button class="ribbon-btn" id="btnCopy"><i class="fas fa-copy"></i><span>Copiar</span></button>
+                    <button class="ribbon-btn" id="btnPaste"><i class="fas fa-paste"></i><span>Colar</span></button>
+                    <button class="ribbon-btn" id="btnCut"><i class="fas fa-cut"></i><span>Recortar</span></button>
+                    <button class="ribbon-btn" id="btnFormatPainter"><i class="fas fa-paint-roller"></i><span>Pincel</span></button>
+                </div>
+
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Fonte</div>
+                    <select id="fontFamily" class="ribbon-select">
+                        <option value="Segoe UI">Segoe UI</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Calibri" selected>Calibri</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Tahoma">Tahoma</option>
+                    </select>
+                    <select id="fontSize" class="ribbon-select">
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12" selected>12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                        <option value="24">24</option>
+                        <option value="28">28</option>
+                        <option value="36">36</option>
+                        <option value="48">48</option>
+                    </select>
+                    <button class="ribbon-btn" id="btnBold"><i class="fas fa-bold"></i></button>
+                    <button class="ribbon-btn" id="btnItalic"><i class="fas fa-italic"></i></button>
+                    <button class="ribbon-btn" id="btnUnderline"><i class="fas fa-underline"></i></button>
+                    <button class="ribbon-btn" id="btnStrike"><i class="fas fa-strikethrough"></i></button>
+                </div>
+
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Alinhamento</div>
+                    <button class="ribbon-btn" id="btnAlignLeft"><i class="fas fa-align-left"></i></button>
+                    <button class="ribbon-btn" id="btnAlignCenter"><i class="fas fa-align-center"></i></button>
+                    <button class="ribbon-btn" id="btnAlignRight"><i class="fas fa-align-right"></i></button>
+                    <button class="ribbon-btn" id="btnAlignTop"><i class="fas fa-arrow-up"></i></button>
+                    <button class="ribbon-btn" id="btnAlignMiddle"><i class="fas fa-arrows-alt-v"></i></button>
+                    <button class="ribbon-btn" id="btnWrapText"><i class="fas fa-level-down-alt"></i><span>Quebrar</span></button>
+                </div>
+
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Número</div>
+                    <select id="numberFormat" class="ribbon-select">
+                        <option value="general">Geral</option>
+                        <option value="number">Número</option>
+                        <option value="currency">Moeda</option>
+                        <option value="accounting">Contábil</option>
+                        <option value="percent">Porcentagem</option>
+                        <option value="date">Data</option>
+                        <option value="time">Hora</option>
+                        <option value="fraction">Fração</option>
+                        <option value="scientific">Científico</option>
+                        <option value="text">Texto</option>
+                    </select>
+                    <button class="ribbon-btn" id="btnIncreaseDecimal"><i class="fas fa-plus"></i></button>
+                    <button class="ribbon-btn" id="btnDecreaseDecimal"><i class="fas fa-minus"></i></button>
+                </div>
+
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Estilos</div>
+                    <button class="ribbon-btn" id="btnCellColor"><i class="fas fa-fill-drip"></i><span>Preench.</span></button>
+                    <button class="ribbon-btn" id="btnFontColor"><i class="fas fa-font"></i><span>Cor Fonte</span></button>
+                    <button class="ribbon-btn" id="btnBorder"><i class="fas fa-border-all"></i><span>Borda</span></button>
+                    <button class="ribbon-btn" id="btnConditionalFormat"><i class="fas fa-highlighter"></i><span>Format. Cond.</span></button>
+                </div>
+
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Células</div>
+                    <button class="ribbon-btn" id="btnMerge"><i class="fas fa-object-group"></i><span>Mesclar</span></button>
+                    <button class="ribbon-btn" id="btnUnmerge"><i class="fas fa-object-ungroup"></i><span>Desmesclar</span></button>
+                </div>
+
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Edição</div>
+                    <button class="ribbon-btn" id="btnInsertRow"><i class="fas fa-plus"></i><span>Ins. Linha</span></button>
+                    <button class="ribbon-btn" id="btnDeleteRow"><i class="fas fa-minus"></i><span>Exc. Linha</span></button>
+                    <button class="ribbon-btn" id="btnInsertCol"><i class="fas fa-plus"></i><span>Ins. Coluna</span></button>
+                    <button class="ribbon-btn" id="btnDeleteCol"><i class="fas fa-minus"></i><span>Exc. Coluna</span></button>
+                    <button class="ribbon-btn" id="btnClear"><i class="fas fa-eraser"></i><span>Limpar</span></button>
+                    <button class="ribbon-btn" id="btnFind"><i class="fas fa-search"></i><span>Localizar</span></button>
+                </div>
+            </div>
+
+            <!-- Inserir -->
+            <div class="ribbon-tab" id="tab-insert" style="display:none;">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Tabelas</div>
+                    <button class="ribbon-btn" id="btnTable"><i class="fas fa-table"></i><span>Tabela</span></button>
+                    <button class="ribbon-btn" id="btnPivotTable"><i class="fas fa-chart-pie"></i><span>Tabela Dinâmica</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Ilustrações</div>
+                    <button class="ribbon-btn" id="btnImage"><i class="fas fa-image"></i><span>Imagem</span></button>
+                    <button class="ribbon-btn" id="btnTextBox"><i class="fas fa-i-cursor"></i><span>Caixa de Texto</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Gráficos</div>
+                    <button class="ribbon-btn" id="btnBarChart"><i class="fas fa-chart-bar"></i><span>Colunas</span></button>
+                    <button class="ribbon-btn" id="btnPieChart"><i class="fas fa-chart-pie"></i><span>Pizza</span></button>
+                    <button class="ribbon-btn" id="btnLineChart"><i class="fas fa-chart-line"></i><span>Linha</span></button>
+                    <button class="ribbon-btn" id="btnAreaChart"><i class="fas fa-chart-area"></i><span>Área</span></button>
+                    <button class="ribbon-btn" id="btnDoughnutChart"><i class="fas fa-circle-notch"></i><span>Rosca</span></button>
+                    <button class="ribbon-btn" id="btnRadarChart"><i class="fas fa-braille"></i><span>Radar</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Funções</div>
+                    <button class="ribbon-btn" id="btnFunction"><i class="fas fa-calculator"></i><span>Inserir Função</span></button>
+                    <button class="ribbon-btn" id="btnAutoSum"><i class="fas fa-sigma"></i><span>AutoSoma</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Links</div>
+                    <button class="ribbon-btn" id="btnHyperlink"><i class="fas fa-link"></i><span>Hiperlink</span></button>
+                    <button class="ribbon-btn" id="btnComment"><i class="fas fa-comment-medical"></i><span>Comentário</span></button>
+                </div>
+            </div>
+
+            <!-- Layout da Página -->
+            <div class="ribbon-tab" id="tab-page" style="display:none;">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Configurar Página</div>
+                    <button class="ribbon-btn" id="btnOrientationPortrait"><i class="fas fa-file"></i><span>Retrato</span></button>
+                    <button class="ribbon-btn" id="btnOrientationLandscape"><i class="fas fa-file" style="transform:rotate(90deg)"></i><span>Paisagem</span></button>
+                    <button class="ribbon-btn" id="btnPrintArea"><i class="fas fa-crop-alt"></i><span>Área Impressão</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Dimensionar</div>
+                    <button class="ribbon-btn" id="btnColWidth"><i class="fas fa-arrows-alt-h"></i><span>Largura Coluna</span></button>
+                    <button class="ribbon-btn" id="btnRowHeight"><i class="fas fa-arrows-alt-v"></i><span>Altura Linha</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Opções da Planilha</div>
+                    <button class="ribbon-btn" id="btnToggleGridlines"><i class="fas fa-border-none"></i><span>Grade</span></button>
+                    <button class="ribbon-btn" id="btnToggleHeadings"><i class="fas fa-heading"></i><span>Títulos</span></button>
+                </div>
+            </div>
+
+            <!-- Fórmulas -->
+            <div class="ribbon-tab" id="tab-formulas" style="display:none;">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Biblioteca de Funções</div>
+                    <button class="ribbon-btn" id="btnFunction2"><i class="fas fa-calculator"></i><span>Inserir Função</span></button>
+                    <button class="ribbon-btn" id="btnAutoSum2"><i class="fas fa-sigma"></i><span>AutoSoma</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Auditoria de Fórmulas</div>
+                    <button class="ribbon-btn" id="btnShowFormulas"><i class="fas fa-eye"></i><span>Mostrar Fórmulas</span></button>
+                    <button class="ribbon-btn" id="btnTraceErrors"><i class="fas fa-bug"></i><span>Verificar Erros</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Cálculo</div>
+                    <button class="ribbon-btn" id="btnRecalculate"><i class="fas fa-sync"></i><span>Recalcular</span></button>
+                </div>
+            </div>
+
+            <!-- Dados -->
+            <div class="ribbon-tab" id="tab-data" style="display:none;">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Classificar e Filtrar</div>
+                    <button class="ribbon-btn" id="btnSortAsc"><i class="fas fa-sort-alpha-down"></i><span>Crescente</span></button>
+                    <button class="ribbon-btn" id="btnSortDesc"><i class="fas fa-sort-alpha-up"></i><span>Decrescente</span></button>
+                    <button class="ribbon-btn" id="btnFilter"><i class="fas fa-filter"></i><span>Filtro</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Ferramentas de Dados</div>
+                    <button class="ribbon-btn" id="btnDataValidation"><i class="fas fa-check-square"></i><span>Validação</span></button>
+                    <button class="ribbon-btn" id="btnRemoveDuplicates"><i class="fas fa-clone"></i><span>Remover Duplic.</span></button>
+                    <button class="ribbon-btn" id="btnTextToColumns"><i class="fas fa-columns"></i><span>Texto p/ Colunas</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Estrutura de Tópicos</div>
+                    <button class="ribbon-btn" id="btnGroupRows"><i class="fas fa-compress"></i><span>Agrupar</span></button>
+                    <button class="ribbon-btn" id="btnUngroupRows"><i class="fas fa-expand"></i><span>Desagrupar</span></button>
+                </div>
+            </div>
+
+            <!-- Revisão -->
+            <div class="ribbon-tab" id="tab-review" style="display:none;">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Revisão de Texto</div>
+                    <button class="ribbon-btn" id="btnSpellCheck"><i class="fas fa-spell-check"></i><span>Ortografia</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Comentários</div>
+                    <button class="ribbon-btn" id="btnNewComment"><i class="fas fa-comment-medical"></i><span>Novo Comentário</span></button>
+                    <button class="ribbon-btn" id="btnShowComments"><i class="fas fa-comments"></i><span>Mostrar Todos</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Proteger</div>
+                    <button class="ribbon-btn" id="btnProtectSheet"><i class="fas fa-lock"></i><span>Proteger Planilha</span></button>
+                </div>
+            </div>
+
+            <!-- Exibição -->
+            <div class="ribbon-tab" id="tab-view" style="display:none;">
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Exibições de Pasta de Trabalho</div>
+                    <button class="ribbon-btn" id="btnNormalView"><i class="fas fa-th"></i><span>Normal</span></button>
+                    <button class="ribbon-btn" id="btnPageLayoutView"><i class="fas fa-file-alt"></i><span>Layout Página</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Mostrar</div>
+                    <button class="ribbon-btn" id="btnToggleGridlinesView"><i class="fas fa-border-all"></i><span>Grade</span></button>
+                    <button class="ribbon-btn" id="btnToggleFormulaBar"><i class="fas fa-terminal"></i><span>Barra Fórmulas</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Congelar</div>
+                    <button class="ribbon-btn" id="btnFreezeTopRow"><i class="fas fa-thumbtack"></i><span>Congelar Linha</span></button>
+                    <button class="ribbon-btn" id="btnFreezeFirstCol"><i class="fas fa-thumbtack" style="transform:rotate(90deg)"></i><span>Congelar Coluna</span></button>
+                    <button class="ribbon-btn" id="btnUnfreeze"><i class="fas fa-times"></i><span>Descongelar</span></button>
+                </div>
+                <div class="ribbon-group">
+                    <div class="ribbon-group-title">Zoom</div>
+                    <button class="ribbon-btn" id="btnZoomIn2"><i class="fas fa-search-plus"></i><span>Ampliar</span></button>
+                    <button class="ribbon-btn" id="btnZoomOut2"><i class="fas fa-search-minus"></i><span>Reduzir</span></button>
+                    <button class="ribbon-btn" id="btnZoom100"><i class="fas fa-percentage"></i><span>100%</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de Fórmula -->
+        <div id="formula-bar">
+            <div id="cell-reference">A1</div>
+            <div id="formula-functions">
+                <i class="fas fa-fx" title="Inserir Função"></i>
+            </div>
+            <div id="formula-input">
+                <input type="text" id="formulaField" placeholder="Digite uma fórmula ou valor...">
+            </div>
+        </div>
+
+        <!-- Container da Planilha -->
+        <div id="sheet-container">
+            <div id="sheet-scroll">
+                <table id="spreadsheet"></table>
+                <div id="chart-layer"></div>
+            </div>
+        </div>
+
+        <!-- Barra de Status -->
+        <div id="status-bar">
+            <div id="status-left">
+                <span id="status-ready">Pronto</span>
+                <span id="status-cell">Célula: A1</span>
+            </div>
+            <div id="status-center">
+                <span id="status-mode">Inserir</span>
+                <span id="status-selection">Seleção: 1x1</span>
+                <span id="status-agg"></span>
+            </div>
+            <div id="status-right">
+                <div id="sheet-tabs">
+                    <span class="sheet-tab active" data-sheet="0">Planilha1</span>
+                    <button class="sheet-add-btn" id="btnAddSheet"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="status-zoom">
+                    <i class="fas fa-search-minus" id="zoomOut"></i>
+                    <span id="zoomLevel">100%</span>
+                    <i class="fas fa-search-plus" id="zoomIn"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painéis Laterais -->
+        <div id="side-panel" style="display:none;">
+            <div id="panel-header">
+                <span>Formatação</span>
+                <button id="closePanel"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="panel-content">
+                <div class="panel-section">
+                    <h4>Cor de Preenchimento</h4>
+                    <input type="color" id="fillColorPicker" value="#ffffff">
+                </div>
+                <div class="panel-section">
+                    <h4>Cor da Fonte</h4>
+                    <input type="color" id="fontColorPicker" value="#000000">
+                </div>
+                <div class="panel-section">
+                    <h4>Bordas</h4>
+                    <button id="borderAll"><i class="fas fa-border-all"></i> Todas</button>
+                    <button id="borderOutside"><i class="fas fa-border-outer"></i> Externas</button>
+                    <button id="borderNone"><i class="fas fa-border-none"></i> Nenhuma</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu de contexto (clique direito) -->
+        <div id="contextMenu" class="context-menu">
+            <div class="context-item" data-action="cut"><i class="fas fa-cut"></i> Recortar</div>
+            <div class="context-item" data-action="copy"><i class="fas fa-copy"></i> Copiar</div>
+            <div class="context-item" data-action="paste"><i class="fas fa-paste"></i> Colar</div>
+            <div class="context-sep"></div>
+            <div class="context-item" data-action="insertRow"><i class="fas fa-plus"></i> Inserir Linha</div>
+            <div class="context-item" data-action="deleteRow"><i class="fas fa-minus"></i> Excluir Linha</div>
+            <div class="context-item" data-action="insertCol"><i class="fas fa-plus"></i> Inserir Coluna</div>
+            <div class="context-item" data-action="deleteCol"><i class="fas fa-minus"></i> Excluir Coluna</div>
+            <div class="context-sep"></div>
+            <div class="context-item" data-action="clear"><i class="fas fa-eraser"></i> Limpar Conteúdo</div>
+            <div class="context-item" data-action="comment"><i class="fas fa-comment-medical"></i> Inserir Comentário</div>
+        </div>
+
+        <!-- Modal de Funções -->
+        <div id="functionModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Inserir Função</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="functionSearch" placeholder="Pesquisar função...">
+                    <div id="functionList"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" id="cancelFunction">Cancelar</button>
+                    <button class="btn-insert" id="insertFunction">Inserir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Genérico (usado por vários recursos) -->
+        <div id="genericModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="genericModalTitle">Título</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body" id="genericModalBody"></div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" id="genericModalCancel">Cancelar</button>
+                    <button class="btn-insert" id="genericModalOk">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Ajuda -->
+        <div id="helpModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Ajuda do Excel</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <h3>Atalhos de Teclado</h3>
+                    <ul>
+                        <li><strong>Ctrl+Z</strong> - Desfazer</li>
+                        <li><strong>Ctrl+Y</strong> - Refazer</li>
+                        <li><strong>Ctrl+C</strong> - Copiar</li>
+                        <li><strong>Ctrl+V</strong> - Colar</li>
+                        <li><strong>Ctrl+X</strong> - Recortar</li>
+                        <li><strong>Ctrl+B/I/U</strong> - Negrito/Itálico/Sublinhado</li>
+                        <li><strong>Ctrl+F</strong> - Localizar e substituir</li>
+                        <li><strong>F2</strong> - Editar célula</li>
+                        <li><strong>Delete</strong> - Limpar célula</li>
+                        <li><strong>Ctrl+Home</strong> - Ir para A1</li>
+                        <li><strong>Ctrl+End</strong> - Ir para última célula</li>
+                        <li><strong>Shift+Setas</strong> - Estender seleção</li>
+                        <li><strong>Ctrl+Setas</strong> - Ir até o limite dos dados</li>
+                        <li><strong>Tab / Enter</strong> - Mover para direita / abaixo</li>
+                    </ul>
+                    <h3>Categorias de Fórmulas Disponíveis</h3>
+                    <ul>
+                        <li><strong>Matemática:</strong> SUM, PRODUCT, ROUND, ABS, SQRT, POWER, MOD, INT, TRUNC, PI, RAND, RANDBETWEEN…</li>
+                        <li><strong>Estatística:</strong> AVERAGE, MEDIAN, MAX, MIN, COUNT, COUNTA, COUNTBLANK, STDEV, VAR, RANK, LARGE, SMALL…</li>
+                        <li><strong>Lógica:</strong> IF, AND, OR, NOT, IFERROR, ISERROR, ISBLANK, ISNUMBER, ISTEXT…</li>
+                        <li><strong>Texto:</strong> CONCATENATE, LEFT, RIGHT, MID, LEN, UPPER, LOWER, PROPER, TRIM, SUBSTITUTE, FIND, TEXT…</li>
+                        <li><strong>Pesquisa:</strong> VLOOKUP, HLOOKUP, INDEX, MATCH, CHOOSE…</li>
+                        <li><strong>Data/Hora:</strong> TODAY, NOW, DATE, YEAR, MONTH, DAY…</li>
+                        <li><strong>Condicionais:</strong> SUMIF, COUNTIF, SUMIFS, COUNTIFS…</li>
+                    </ul>
+                    <p>Use o botão <strong>fx</strong> na barra de fórmulas ou a aba <strong>Fórmulas</strong> para ver a lista completa.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-close-help" id="closeHelp">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="database/data.js"></script>
+    <script src="js/formulaEngine.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
